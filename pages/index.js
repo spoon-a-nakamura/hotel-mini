@@ -15,9 +15,9 @@ export default function Home() {
         <meta name='theme-color' content='#A9472E' />
         <meta name='robots' content='index,follow' />
         <meta name='author' content='スタジオスプーン' />
-        <title>HOTEL Mini</title>
-        <meta name='description' content='HOTEL Mini' />
-        <meta name='keywords' content='HOTEL Mini, React, スタジオスプーン' />
+        <title>HotelMini</title>
+        <meta name='description' content='「HotelMini」は、人気のない場所にあり、なかなか見つけることの出来ない高貴なホテル。そんなホテルで働く、個性豊かな使用人と高貴な宿泊客のことをこっそり紹介しちゃいます。' />
+        <meta name='keywords' content='HotelMiniト, React, スタジオスプーン' />
         <link rel='canonical' href='https://hotel-mini.vercel.app/' />
         <link
           rel='shortcut icon'
@@ -28,15 +28,15 @@ export default function Home() {
           rel='apple-touch-icon'
           href='/images/common/favicon.png'
         />
-        <meta property='og:site_name' content='HOTEL Mini' />
-        <meta property='og:title' content='HOTEL Mini' />
+        <meta property='og:site_name' content='HotelMini' />
+        <meta property='og:title' content='HotelMini' />
         <meta
           property='og:image'
           content='https://hotel-mini.vercel.app/images/common/ogimg.png'
         />
         <meta
           property='og:description'
-          content='HOTEL Mini（制作：スタジオスプーン）'
+          content='「HotelMini」は、人気のない場所にあり、なかなか見つけることの出来ない高貴なホテル。そんなホテルで働く、個性豊かな使用人と高貴な宿泊客のことをこっそり紹介しちゃいます。'
         />
         <meta property='og:url' content='https://hotel-mini.vercel.app/' />
         <meta property='og:type' content='website' />
