@@ -7,10 +7,10 @@ export default function Splash() {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false)
-    }, 7000)
+    }, 6500)
     setTimeout(() => {
       setIsLoaded(true)
-    }, 8000)
+    }, 7500)
   }, [])
   return (
     <>
