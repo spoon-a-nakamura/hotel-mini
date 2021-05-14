@@ -16,7 +16,10 @@ export default function Home() {
         <meta name='robots' content='index,follow' />
         <meta name='author' content='スタジオスプーン' />
         <title>HotelMini</title>
-        <meta name='description' content='「HotelMini」は、人気のない場所にあり、なかなか見つけることの出来ない高貴なホテル。そんなホテルで働く、個性豊かな使用人と高貴な宿泊客のことをこっそり紹介しちゃいます。' />
+        <meta
+          name='description'
+          content='「HotelMini」は、人気のない場所にあり、なかなか見つけることの出来ない高貴なホテル。そんなホテルで働く、個性豊かな使用人と高貴な宿泊客のことをこっそり紹介しちゃいます。'
+        />
         <meta name='keywords' content='HotelMiniト, React, スタジオスプーン' />
         <link rel='canonical' href='https://hotel-mini.vercel.app/' />
         <link
@@ -24,10 +27,7 @@ export default function Home() {
           href='/images/common/favicon.png'
           type='image/png'
         />
-        <link
-          rel='apple-touch-icon'
-          href='/images/common/favicon.png'
-        />
+        <link rel='apple-touch-icon' href='/images/common/favicon.png' />
         <meta property='og:site_name' content='HotelMini' />
         <meta property='og:title' content='HotelMini' />
         <meta
@@ -57,8 +57,8 @@ export default function Home() {
         ></script>
       </Head>
       <GlobalCss />
+      <Splash />
       <Container>
-        <Splash />
         <Main />
       </Container>
     </>

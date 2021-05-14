@@ -6,6 +6,7 @@ import character3 from '../lottie/character/03.json'
 import character4 from '../lottie/character/04.json'
 import character5 from '../lottie/character/05.json'
 import character6 from '../lottie/character/06.json'
+import { device } from '../components/MediaQuery'
 
 export default function Main() {
   return (
@@ -39,18 +40,31 @@ const Wrapper = styled.ul`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  flex-wrap: wrap;
+  width: 100%;
+  @media ${device.underMobileL} {
+    padding: 2%;
+  }
 `
 const List = styled.li`
+  width: 47%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   border-radius: 20px;
   background: #fafafa;
-  padding: 20px;
-  margin: 20px;
   box-shadow: 10px 10px 100px rgba(0, 0, 0, 0.1);
+  margin-bottom: 3%;
+  &:not(:nth-child(2n)) {
+    margin-right: 3%;
+  }
+  @media ${device.underMobileL} {
+    width: 100%;
+    &:not(:nth-child(2n)) {
+      margin-right: 0;
+    }
+  }
   div {
     width: 50%;
   }
