@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-// import { device } from '../components/MediaQuery'
+import { device } from '../components/MediaQuery'
 
 export default function Container({ children }) {
   console.log('Render Container')
@@ -11,7 +11,17 @@ export default function Container({ children }) {
 }
 
 const Wrapper = styled.div`
-  padding: 2%;
+  width: 100%;
+  height: 100%;
+  @media ${device.underMobileL} {
+    height: auto;
+  }
 `
 
-const Main = styled.main``
+const Main = styled.main`
+  width: 100%;
+  height: 100%;
+  @media ${device.underMobileL} {
+    height: auto;
+  }
+`

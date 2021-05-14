@@ -1,5 +1,6 @@
 import emotionReset from 'emotion-reset'
 import { Global, css } from '@emotion/react'
+import { device } from '../components/MediaQuery'
 
 export default function GlobalCss() {
   return (
@@ -16,21 +17,29 @@ export default function GlobalCss() {
         body {
           padding: 0;
           margin: 0;
-          font-family: vdl-megamaru, -apple-system, BlinkMacSystemFont, Segoe UI,
-            Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
-            Helvetica Neue, sans-serif;
+          font-family: sans-serif;
           font-weight: 400;
           font-style: normal;
-          color: #707070;
+          color: #fff;
           width: 100%;
           height: 100%;
-          background: #CE4833;
+          background: #ce4833;
+          max-height: 100vh;
+          overflow: hidden;
+          @media ${device.underMobileL} {
+            max-height: 100%;
+            overflow: initial;
+            height: auto;
+          }
         }
         #__next {
           width: 100%;
           height: 100%;
           position: absolute;
           top: 0;
+          @media ${device.underMobileL} {
+            height: auto;
+          }
         }
         /* AdobeFont */
         /* html {

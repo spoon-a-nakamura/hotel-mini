@@ -3,23 +3,30 @@ import styled from '@emotion/styled'
 
 export default function Splash() {
   const [isVideoEnded, setIsVideoEnded] = useState(false)
-  const [isVanished, setIsVanished] = useState(false)
+  const [isUnMounted, setIsUnMounted] = useState(false)
   const finishVideo = () => {
     setTimeout(() => {
       setIsVideoEnded(true)
     }, 6000)
-    setTimeout(() => {
-      setIsVanished(true)
-    }, 7000)
+  }
+  const removeVideo = () => {
+    setIsUnMounted(true)
   }
   return (
-    <>
-      <Wrapper isVideoEnded={isVideoEnded} isVanished={isVanished}>
-        <Video autoPlay muted onPlaying={() => finishVideo()}>
-          <Source src='/movie/splash.mp4' type='video/mp4' />
-        </Video>
-      </Wrapper>
-    </>
+    !isUnMounted && (
+      <>
+        <Wrapper isVideoEnded={isVideoEnded}>
+          <Video
+            autoPlay
+            muted
+            onPlaying={() => finishVideo()}
+            onEnded={() => removeVideo()}
+          >
+            <Source src='/movie/splash.mp4' type='video/mp4' />
+          </Video>
+        </Wrapper>
+      </>
+    )
   )
 }
 const Wrapper = styled.div`
@@ -35,7 +42,6 @@ const Wrapper = styled.div`
   background: #e95f4a;
   transition: opacity 1s ease-in-out;
   opacity: ${({ isVideoEnded }) => (isVideoEnded ? 0 : 1)};
-  display: ${({ isVanished }) => (isVanished ? 'none' : 'block')};
   z-index: 100;
 `
 
