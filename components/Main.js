@@ -1,11 +1,4 @@
 import styled from '@emotion/styled'
-import Lottie from 'lottie-react'
-import character1 from '../lottie/character/01.json'
-import character2 from '../lottie/character/02.json'
-import character3 from '../lottie/character/03.json'
-import character4 from '../lottie/character/04.json'
-import character5 from '../lottie/character/05.json'
-import character6 from '../lottie/character/06.json'
 import { device } from '../components/MediaQuery'
 
 export default function Main() {
@@ -13,22 +6,22 @@ export default function Main() {
     <>
       <Wrapper>
         <List>
-          <Lottie animationData={character1} />
+          <Character src='/images/character/01.webp' alt='' />
         </List>
         <List>
-          <Lottie animationData={character2} />
+          <Character src='/images/character/02.webp' alt='' />
         </List>
         <List>
-          <Lottie animationData={character3} />
+          <Character src='/images/character/03.webp' alt='' />
         </List>
         <List>
-          <Lottie animationData={character4} />
+          <Character src='/images/character/04.webp' alt='' />
         </List>
         <List>
-          <Lottie animationData={character5} />
+          <Character src='/images/character/05.webp' alt='' />
         </List>
         <List>
-          <Lottie animationData={character6} />
+          <Character src='/images/character/06.webp' alt='' />
         </List>
       </Wrapper>
     </>
@@ -68,4 +61,7 @@ const List = styled.li`
   div {
     width: 50%;
   }
+`
+const Character = styled.img`
+  width: 100%;
 `

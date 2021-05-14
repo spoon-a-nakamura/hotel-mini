@@ -1,21 +1,21 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import styled from '@emotion/styled'
 
 export default function Splash() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [isLoaded, setIsLoaded] = useState(false)
-  useEffect(() => {
+  const [isVideoEnded, setIsVideoEnded] = useState(false)
+  const [isVanished, setIsVanished] = useState(false)
+  const finishVideo = () => {
     setTimeout(() => {
-      setIsLoading(false)
-    }, 6500)
+      setIsVideoEnded(true)
+    }, 6000)
     setTimeout(() => {
-      setIsLoaded(true)
-    }, 7500)
-  }, [])
+      setIsVanished(true)
+    }, 7000)
+  }
   return (
     <>
-      <Wrapper isLoading={isLoading} isLoaded={isLoaded}>
-        <Video autoPlay muted>
+      <Wrapper isVideoEnded={isVideoEnded} isVanished={isVanished}>
+        <Video autoPlay muted onPlaying={() => finishVideo()}>
           <Source src='/movie/splash.mp4' type='video/mp4' />
         </Video>
       </Wrapper>
@@ -34,8 +34,8 @@ const Wrapper = styled.div`
   height: 100%;
   background: #e95f4a;
   transition: opacity 1s ease-in-out;
-  opacity: ${({ isLoading }) => (isLoading ? 1 : 0)};
-  display: ${({ isLoaded }) => (isLoaded ? 'none' : 'block')};
+  opacity: ${({ isVideoEnded }) => (isVideoEnded ? 0 : 1)};
+  display: ${({ isVanished }) => (isVanished ? 'none' : 'block')};
   z-index: 100;
 `
 
