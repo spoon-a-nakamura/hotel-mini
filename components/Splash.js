@@ -19,6 +19,7 @@ export default function Splash() {
           <Video
             autoPlay
             muted
+            playsInline
             onPlaying={() => finishVideo()}
             onEnded={() => removeVideo()}
           >
