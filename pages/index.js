@@ -2,12 +2,12 @@ import Head from 'next/head'
 import GlobalCss from '../components/GlobalCss'
 import Container from '../components/Container'
 import Splash from '../components/Splash'
-// import Main from '../components/Main'
-import dynamic from 'next/dynamic'
+import Main from '../components/Main'
+// import dynamic from 'next/dynamic'
 
-const MainNoSSR = dynamic(() => import('../components/Main'), {
-  ssr: false,
-})
+// const MainNoSSR = dynamic(() => import('../components/Main'), {
+//   ssr: false,
+// })
 
 export default function Home() {
   return (
@@ -64,7 +64,8 @@ export default function Home() {
       <GlobalCss />
       <Splash />
       <Container>
-        <MainNoSSR />
+        {/* <MainNoSSR /> */}
+        <Main />
       </Container>
     </>
   )
