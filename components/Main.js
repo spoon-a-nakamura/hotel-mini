@@ -1,37 +1,58 @@
 import styled from '@emotion/styled'
 import { device } from '../components/MediaQuery'
-// import { Stage, AnimatedSprite } from '@inlet/react-pixi'
+import { Stage, AnimatedSprite } from '@inlet/react-pixi'
 
-// const checkIsOdd = (number) => number % 2 === 1
-// const filterOddArray = (array) => array.filter((_, index) => checkIsOdd(index))
+const checkIsOdd = (number) => number % 2 === 1
+const filterOddArray = (array) => array.filter((_, index) => checkIsOdd(index))
 
-// const allImages = [...Array(119)].map(
-//   (_, index) => `/images/character/01/${index + 1}.png`
-// )
-// const oddFilteredImages = filterOddArray(allImages)
+const allImages = [...Array(90)].map(
+  (_, index) => `/images/character/01/${index + 1}.png`
+)
+const oddFilteredImages = filterOddArray(allImages)
 
-// const [width, height] = [632, 853]
+const [width, height] = [632, 853]
 
-// const image = (
-//   <Stage
-//     width={width / 2}
-//     height={height / 2}
-//     options={{
-//       autoDensity: true,
-//       backgroundAlpha: 0,
-//     }}
-//   >
-//     <AnimatedSprite
-//       anchor={0}
-//       images={allImages}
-//       isPlaying={true}
-//       initialFrame={1}
-//       animationSpeed={1}
-//       width={width / 2}
-//       height={height / 2}
-//     />
-//   </Stage>
-// )
+const imageAll = (
+  <Stage
+    width={width / 2}
+    height={height / 2}
+    options={{
+      autoDensity: true,
+      backgroundAlpha: 0,
+    }}
+  >
+    <AnimatedSprite
+      anchor={0}
+      images={allImages}
+      isPlaying={true}
+      initialFrame={1}
+      animationSpeed={0.5}
+      width={width / 2}
+      height={height / 2}
+    />
+  </Stage>
+)
+
+const image = (
+  <Stage
+    width={width / 2}
+    height={height / 2}
+    options={{
+      autoDensity: true,
+      backgroundAlpha: 0,
+    }}
+  >
+    <AnimatedSprite
+      anchor={0}
+      images={oddFilteredImages}
+      isPlaying={true}
+      initialFrame={1}
+      animationSpeed={0.5}
+      width={width / 2}
+      height={height / 2}
+    />
+  </Stage>
+)
 export default function Main() {
   return (
     <>
@@ -41,24 +62,12 @@ export default function Main() {
           <Hotel src='/images/others/hotel.svg' alt='' />
         </Title>
         <Characters>
-          <List number='01'>
-            <Character src='/images/character/01.webp' alt='' />
-          </List>
-          <List number='02'>
-            <Character src='/images/character/02.webp' alt='Sam' />
-          </List>
-          <List number='03'>
-            <Character src='/images/character/03.webp' alt='' />
-          </List>
-          <List number='04'>
-            <Character src='/images/character/04.webp' alt='' />
-          </List>
-          <List number='05'>
-            <Character src='/images/character/05.webp' alt='' />
-          </List>
-          <List number='06'>
-            <Character src='/images/character/06.webp' alt='' />
-          </List>
+          <List number='01'>{imageAll}</List>
+          <List number='02'>{imageAll}</List>
+          <List number='03'>{imageAll}</List>
+          <List number='04'>{image}</List>
+          <List number='05'>{image}</List>
+          <List number='06'>{image}</List>
         </Characters>
       </Wrapper>
     </>
@@ -138,7 +147,7 @@ const List = styled.li`
     }
   }
 `
-const Character = styled.img`
-  width: 100%;
-  transform: scale(1.1);
-`
+// const Character = styled.img`
+//   width: 100%;
+//   transform: scale(1.1);
+// `
