@@ -3,15 +3,17 @@ import { device } from '../components/MediaQuery'
 import { Stage, AnimatedSprite } from '@inlet/react-pixi'
 import { useState, useEffect } from 'react'
 
-// アニメーションさせる画像を定義（Arrayの中にはファイル数量を記載）
-const allImages = [...Array(90)].map(
-  (_, index) => `/images/character/01/${index + 1}.png`
-)
+// characterSizeには対象となる画像枚数を。directoryIdは対象ディレクトリ名称を
+const allImages = (characterSize, directoryId) =>
+  [...Array(characterSize)].map(
+    (_, index) => `/images/character/${directoryId}/${index + 1}.png`
+  )
 
 // アニメーションさせる画像数を半分にする
-const checkIsOdd = (number) => number % 2 === 1
-const filterOddArray = (array) => array.filter((_, index) => checkIsOdd(index))
-const oddFilteredImages = filterOddArray(allImages)
+// const checkIsOdd = (number) => number % 2 === 1
+// const filterOddArray = (array) => array.filter((_, index) => checkIsOdd(index))
+// const oddFilteredImages = (characterSize, directoryId) =>
+//   filterOddArray(allImages(characterSize, directoryId))
 
 const [width, height] = [632, 853]
 const image = (images, speed) => (
@@ -34,6 +36,13 @@ const image = (images, speed) => (
     />
   </Stage>
 )
+// function loop() {
+//   console.log('Loop start')
+//   element.animation.playSegments([79, 639], true)
+// }
+// element.animation.playSegments([0, 79], true)
+// element.animation.addEventListener('complete', loop)
+
 export default function Main() {
   const [isSpeed, setIsSpeed] = useState(0.4)
 
@@ -53,13 +62,13 @@ export default function Main() {
           <Logo src='/images/others/logo.svg' alt='Hotel Mini' />
           <Hotel src='/images/others/hotel.svg' alt='' />
         </Title>
-        <Characters onClick={() => setIsSpeed(isSpeed + 0.01)}>
-          <List number='01'>{image(allImages, isSpeed)}</List>
-          <List number='02'>{image(allImages, isSpeed)}</List>
-          <List number='03'>{image(allImages, isSpeed)}</List>
-          <List number='04'>{image(allImages, isSpeed)}</List>
-          <List number='05'>{image(allImages, isSpeed)}</List>
-          <List number='06'>{image(allImages, isSpeed)}</List>
+        <Characters>
+          <List number='01'>{image(allImages(90, '01'), isSpeed)}</List>
+          <List number='02'>{image(allImages(32, '02'), isSpeed)}</List>
+          <List number='03'>{image(allImages(90, '03'), isSpeed)}</List>
+          <List number='04'>{image(allImages(90, '04'), isSpeed)}</List>
+          <List number='05'>{image(allImages(90, '05'), isSpeed)}</List>
+          <List number='06'>{image(allImages(90, '06'), isSpeed)}</List>
         </Characters>
       </Wrapper>
     </>
@@ -137,6 +146,12 @@ const List = styled.li`
     &:not(:nth-of-type(3n)) {
       margin-right: 0;
     }
+  }
+  canvas {
+    pointer-events: none;
+    max-width: 100%;
+    height: initial !important;
+    object-fit: contain;
   }
 `
 // const Character = styled.img`
