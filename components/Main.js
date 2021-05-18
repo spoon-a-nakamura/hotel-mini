@@ -1,18 +1,20 @@
 import styled from '@emotion/styled'
 import { device } from '../components/MediaQuery'
 import { Stage, AnimatedSprite } from '@inlet/react-pixi'
+import { useState, useEffect } from 'react'
 
-const checkIsOdd = (number) => number % 2 === 1
-const filterOddArray = (array) => array.filter((_, index) => checkIsOdd(index))
-
+// アニメーションさせる画像を定義（Arrayの中にはファイル数量を記載）
 const allImages = [...Array(90)].map(
   (_, index) => `/images/character/01/${index + 1}.png`
 )
+
+// アニメーションさせる画像数を半分にする
+const checkIsOdd = (number) => number % 2 === 1
+const filterOddArray = (array) => array.filter((_, index) => checkIsOdd(index))
 const oddFilteredImages = filterOddArray(allImages)
 
 const [width, height] = [632, 853]
-
-const imageAll = (
+const image = (images, speed) => (
   <Stage
     width={width / 2}
     height={height / 2}
@@ -23,37 +25,27 @@ const imageAll = (
   >
     <AnimatedSprite
       anchor={0}
-      images={allImages}
+      images={images}
       isPlaying={true}
-      initialFrame={1}
-      animationSpeed={0.5}
-      width={width / 2}
-      height={height / 2}
-    />
-  </Stage>
-)
-
-const image = (
-  <Stage
-    width={width / 2}
-    height={height / 2}
-    options={{
-      autoDensity: true,
-      backgroundAlpha: 0,
-    }}
-  >
-    <AnimatedSprite
-      anchor={0}
-      images={oddFilteredImages}
-      isPlaying={true}
-      initialFrame={1}
-      animationSpeed={0.5}
+      initialFrame={0}
+      animationSpeed={speed}
       width={width / 2}
       height={height / 2}
     />
   </Stage>
 )
 export default function Main() {
+  const [isSpeed, setIsSpeed] = useState(0.4)
+
+  // Pixiを描画するタイミングを調整しないといけないのだが、今はこれしか思い浮かばない
+  useEffect(() => {
+    setTimeout(() => {
+      setIsSpeed(isSpeed + 0.1)
+    }, 1000)
+  }, [])
+
+  console.log(isSpeed)
+
   return (
     <>
       <Wrapper>
@@ -61,13 +53,13 @@ export default function Main() {
           <Logo src='/images/others/logo.svg' alt='Hotel Mini' />
           <Hotel src='/images/others/hotel.svg' alt='' />
         </Title>
-        <Characters>
-          <List number='01'>{imageAll}</List>
-          <List number='02'>{imageAll}</List>
-          <List number='03'>{imageAll}</List>
-          <List number='04'>{image}</List>
-          <List number='05'>{image}</List>
-          <List number='06'>{image}</List>
+        <Characters onClick={() => setIsSpeed(isSpeed + 0.01)}>
+          <List number='01'>{image(allImages, isSpeed)}</List>
+          <List number='02'>{image(allImages, isSpeed)}</List>
+          <List number='03'>{image(allImages, isSpeed)}</List>
+          <List number='04'>{image(allImages, isSpeed)}</List>
+          <List number='05'>{image(allImages, isSpeed)}</List>
+          <List number='06'>{image(allImages, isSpeed)}</List>
         </Characters>
       </Wrapper>
     </>
