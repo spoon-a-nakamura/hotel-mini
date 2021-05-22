@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { device } from '../components/MediaQuery'
 import { Stage, AnimatedSprite } from '@inlet/react-pixi'
 import { useState, useEffect } from 'react'
+import { sppx, pcpx, pcfz } from './Util'
 
 // characterSizeには対象となる画像枚数を。directoryIdは対象ディレクトリ名称を
 const allImages = (characterSize, directoryId) =>
@@ -16,10 +17,10 @@ const allImages = (characterSize, directoryId) =>
 //   filterOddArray(allImages(characterSize, directoryId))
 
 const [width, height] = [632, 853]
-const image = (images, speed) => (
+const image = (images, speed, num) => (
   <Stage
-    width={width / 2}
-    height={height / 2}
+    width={width / num}
+    height={height / num}
     options={{
       autoDensity: true,
       backgroundAlpha: 0,
@@ -31,29 +32,25 @@ const image = (images, speed) => (
       isPlaying={true}
       initialFrame={0}
       animationSpeed={speed}
-      width={width / 2}
-      height={height / 2}
+      width={width / num}
+      height={height / num}
     />
   </Stage>
 )
-// function loop() {
-//   console.log('Loop start')
-//   element.animation.playSegments([79, 639], true)
-// }
-// element.animation.playSegments([0, 79], true)
-// element.animation.addEventListener('complete', loop)
 
 export default function Main() {
   const [isSpeed, setIsSpeed] = useState(0.4)
+  const [isShowModal, setIsShowModal] = useState(false)
 
   // Pixiを描画するタイミングを調整しないといけないのだが、今はこれしか思い浮かばない
   useEffect(() => {
     setTimeout(() => {
       setIsSpeed(isSpeed + 0.1)
-    }, 1000)
+    }, 5000)
   }, [])
 
   console.log(isSpeed)
+  console.log(isShowModal)
 
   return (
     <>
@@ -62,15 +59,52 @@ export default function Main() {
           <Logo src='/images/others/logo.svg' alt='Hotel Mini' />
           <Hotel src='/images/others/hotel.svg' alt='' />
         </Title>
+        <Character src='/images/others/ttl.svg' alt='Character' />
         <Characters>
-          <List number='01'>{image(allImages(90, '01'), isSpeed)}</List>
-          <List number='02'>{image(allImages(32, '02'), isSpeed)}</List>
-          <List number='03'>{image(allImages(90, '03'), isSpeed)}</List>
-          <List number='04'>{image(allImages(90, '04'), isSpeed)}</List>
-          <List number='05'>{image(allImages(90, '05'), isSpeed)}</List>
-          <List number='06'>{image(allImages(90, '06'), isSpeed)}</List>
+          <List number='01' onClick={() => setIsShowModal(true)}>
+            {image(allImages(32, '01'), isSpeed, 2)}
+          </List>
+          <List number='02' onClick={() => setIsShowModal(true)}>
+            {image(allImages(90, '02'), isSpeed, 2)}
+          </List>
+          <List number='03' onClick={() => setIsShowModal(true)}>
+            {image(allImages(90, '03'), isSpeed, 2)}
+          </List>
+          <List number='04' onClick={() => setIsShowModal(true)}>
+            <Pc>{image(allImages(90, '04'), isSpeed, 2)}</Pc>
+            <Sp>{image(allImages(90, '05'), isSpeed, 2)}</Sp>
+          </List>
+          <List number='05' onClick={() => setIsShowModal(true)}>
+            <Pc>{image(allImages(90, '05'), isSpeed, 2)}</Pc>
+            <Sp>{image(allImages(90, '04'), isSpeed, 2)}</Sp>
+          </List>
+          <List number='06' onClick={() => setIsShowModal(true)}>
+            {image(allImages(90, '06'), isSpeed, 2)}
+          </List>
         </Characters>
       </Wrapper>
+      <Modal isShowModal={isShowModal}>
+        <Inner>
+          <Image>{image(allImages(32, '01'), isSpeed, 1.65)}</Image>
+          <Profile>
+            <Name>
+              <En>Sam</En>
+              <Ja>（サム）</Ja>
+            </Name>
+            <Introduction>
+              ホテルの新米ベルボーイ。
+              <br />
+              映画「グランドブダペストホテル」に憧れて
+              <br />
+              富裕層が通う高級ホテルで勤務をしている。
+              <br />
+              几帳面で潔癖症。
+            </Introduction>
+            <Border />
+          </Profile>
+        </Inner>
+        <Close onClick={() => setIsShowModal(false)} />
+      </Modal>
     </>
   )
 }
@@ -80,8 +114,8 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  width: 100%;
   height: 100%;
-  padding: 50px;
   border: 5px solid #3a4796;
   &::before {
     content: '';
@@ -98,63 +132,261 @@ const Wrapper = styled.div`
   @media ${device.underMobileL} {
     height: auto;
     flex-direction: column;
-    padding: 20px;
+    padding: ${sppx(16)};
   }
 `
 const Title = styled.div`
-  width: 30%;
-  margin-right: 50px;
+  width: ${pcpx(339.95)};
+  height: ${pcpx(603.88)};
+  margin-right: ${pcpx(50)};
   @media ${device.underMobileL} {
     width: 100%;
+    height: auto;
     margin-right: 0;
-    margin-bottom: 50px;
+    margin-bottom: ${sppx(50)};
   }
 `
-
 const Logo = styled.img`
   width: 100%;
+  margin-bottom: ${pcpx(50)};
+  @media ${device.underMobileL} {
+    width: ${sppx(192.98)};
+    height: ${sppx(118.21)};
+    margin: 0 auto ${sppx(50)};
+    display: block;
+  }
 `
-
 const Hotel = styled.img`
   width: 100%;
+  @media ${device.underMobileL} {
+    width: ${sppx(339.95)};
+    height: ${sppx(349.93)};
+    margin: 0 auto;
+    display: block;
+  }
+`
+const Character = styled.img`
+  @media ${device.overMobileL} {
+    display: none;
+  }
 `
 const Characters = styled.ul`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  width: 60%;
+  width: ${pcpx(914.68)};
+  height: ${pcpx(700)};
   @media ${device.underMobileL} {
     width: 100%;
+    height: auto;
     justify-content: space-between;
+    margin-top: ${sppx(50)};
   }
 `
 const List = styled.li`
-  width: 30%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-bottom: 3%;
+  margin-bottom: ${pcpx(20)};
+  cursor: pointer;
   background: ${({ number }) =>
-    `url(/images/character/${number}.svg) center /98% no-repeat`};
-  &:not(:nth-of-type(3n)) {
-    margin-right: 3%;
+    `url(/images/character/pc/${number}.svg) center /contain no-repeat`};
+  width: ${({ number }) =>
+    number === '01'
+      ? pcpx(311.36)
+      : number === '02'
+      ? pcpx(291.96)
+      : number === '03'
+      ? pcpx(311.36)
+      : number === '04'
+      ? pcpx(330.76)
+      : number === '05'
+      ? pcpx(272.56)
+      : number === '06'
+      ? pcpx(301.66)
+      : 'initial'};
+  height: ${pcpx(340)};
+  &:last-child {
+    margin-left: auto;
   }
   @media ${device.underMobileL} {
-    width: 48%;
-    &:not(:nth-of-type(3n)) {
-      margin-right: 0;
+    background: ${({ number }) =>
+      `url(/images/character/sp/${number}.svg) center /contain no-repeat`};
+    width: ${({ number }) =>
+      number === '01'
+        ? sppx(169.45)
+        : number === '02'
+        ? sppx(159.2)
+        : number === '03'
+        ? sppx(170.01)
+        : number === '04'
+        ? sppx(158.49)
+        : number === '05'
+        ? sppx(158.74)
+        : number === '06'
+        ? sppx(169.45)
+        : 'initial'};
+    height: ${sppx(152.07)};
+    &:nth-of-type(2n) {
+      margin-left: auto;
+    }
+    &:nth-of-type(3) {
+      margin-top: ${sppx(10)};
+    }
+    &:nth-of-type(4) {
+      height: ${sppx(142.07)};
+    }
+    &:nth-of-type(5) {
+      margin-top: ${sppx(10)};
+    }
+    &:nth-of-type(6) {
+      height: ${sppx(162.07)};
     }
   }
   canvas {
     pointer-events: none;
-    max-width: 100%;
+    max-width: 70%;
     height: initial !important;
     object-fit: contain;
   }
 `
-// const Character = styled.img`
-//   width: 100%;
-//   transform: scale(1.1);
-// `
+const Modal = styled.div`
+  position: fixed;
+  background: #ce4833;
+  border: 5px solid #3a4796;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: ${({ isShowModal }) => (isShowModal ? 'initial' : 'none')};
+  &::after {
+    content: '';
+    position: absolute;
+    top: 60%;
+    width: 100%;
+    height: 100%;
+    background: #3a4796;
+    z-index: -1;
+  }
+  opacity: ${({ isShowModal }) => (isShowModal ? '1' : '0')};
+  @media ${device.underMobileL} {
+    background: #3a4796;
+    &::after {
+      top: 30%;
+      background: #ce4833;
+    }
+  }
+`
+
+const Inner = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  @media ${device.underMobileL} {
+    flex-direction: column;
+  }
+`
+const Image = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: ${pcpx(583.58)};
+  height: ${pcpx(637.26)};
+  margin-right: ${pcpx(100)};
+  background: url(/images/character/sp/01.svg) center / contain no-repeat;
+  canvas {
+    width: ${pcpx(373.41)} !important;
+    height: ${pcpx(515.87)} !important;
+  }
+  @media ${device.underMobileL} {
+    width: ${sppx(316)};
+    height: ${sppx(278.21)};
+    margin-right: 0;
+    canvas {
+      width: ${sppx(169)} !important;
+      height: ${sppx(234.1)} !important;
+    }
+  }
+`
+const Profile = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-top: ${pcpx(-88)};
+  @media ${device.underMobileL} {
+    margin-top: ${sppx(50)};
+    margin-right: auto;
+    margin-left: 8vw;
+  }
+`
+
+const Name = styled.h2`
+  font-family: funkydori, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: ${pcfz(100)};
+  @media ${device.underMobileL} {
+    font-size: 18vw;
+  }
+`
+const En = styled.span``
+const Ja = styled.span`
+  font-size: ${pcfz(22)};
+  font-weight: bold;
+`
+const Introduction = styled.p`
+  line-height: 2;
+  margin-top: ${pcpx(-23)};
+  font-size: ${pcfz(20)};
+  @media ${device.underMobileL} {
+    margin-top: ${sppx(-23)};
+  }
+`
+const Border = styled.div`
+  margin-top: ${pcpx(63)};
+  width: ${pcpx(428.18)};
+  height: ${pcpx(38.18)};
+  background: url(/images/others/border.svg) center / contain no-repeat;
+  @media ${device.underMobileL} {
+    width: ${sppx(324)};
+    height: ${sppx(28.18)};
+    left: -5px;
+    position: relative;
+  }
+`
+const Close = styled.div`
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  width: 28px;
+  height: 28px;
+  background: url(/images/others/close.svg) center / contain no-repeat;
+  cursor: pointer;
+  @media ${device.underMobileL} {
+    top: 20px;
+    right: 20px;
+    width: 20px;
+    height: 20px;
+  }
+`
+const Pc = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media ${device.underMobileL} {
+    display: none;
+  }
+`
+const Sp = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media ${device.overMobileL} {
+    display: none;
+  }
+`
