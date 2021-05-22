@@ -33,6 +33,10 @@ export default function Home() {
           type='image/png'
         />
         <link rel='apple-touch-icon' href='/images/common/favicon.png' />
+        <link
+          rel='stylesheet'
+          href='https://use.typekit.net/pcd4jnc.css'
+        ></link>
         <meta property='og:site_name' content='HotelMini' />
         <meta property='og:title' content='HotelMini' />
         <meta

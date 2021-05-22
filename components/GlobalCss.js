@@ -11,15 +11,16 @@ export default function GlobalCss() {
           box-sizing: border-box;
           -moz-osx-font-smoothing: grayscale;
           -webkit-font-smoothing: antialiased;
-          font-smoothing: antialiased;
         }
         html,
         body {
           padding: 0;
           margin: 0;
-          font-family: sans-serif;
-          font-weight: 400;
+          font-family: '游ゴシック Medium', 'Yu Gothic Medium', '游ゴシック体',
+            YuGothic, sans-serif;
+          font-weight: bold;
           font-style: normal;
+          font-size: 18px;
           color: #fff;
           width: 100%;
           height: 100%;
