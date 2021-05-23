@@ -3,6 +3,7 @@ import { device } from '../components/MediaQuery'
 import { Stage, AnimatedSprite } from '@inlet/react-pixi'
 import { useState, useEffect } from 'react'
 import { sppx, pcpx, pcfz } from './Util'
+import { characters } from './characters'
 
 // characterSizeには対象となる画像枚数を。directoryIdは対象ディレクトリ名称を
 const allImages = (characterSize, directoryId) =>
@@ -17,10 +18,10 @@ const allImages = (characterSize, directoryId) =>
 //   filterOddArray(allImages(characterSize, directoryId))
 
 const [width, height] = [632, 853]
-const image = (images, speed, num) => (
+const image = (imageLength, speed, imageSize, isPlaying) => (
   <Stage
-    width={width / num}
-    height={height / num}
+    width={width / imageSize}
+    height={height / imageSize}
     options={{
       autoDensity: true,
       backgroundAlpha: 0,
@@ -28,19 +29,24 @@ const image = (images, speed, num) => (
   >
     <AnimatedSprite
       anchor={0}
-      images={images}
-      isPlaying={true}
+      images={imageLength}
+      isPlaying={isPlaying}
       initialFrame={0}
       animationSpeed={speed}
-      width={width / num}
-      height={height / num}
+      width={width / imageSize}
+      height={height / imageSize}
     />
   </Stage>
 )
 
 export default function Main() {
   const [isSpeed, setIsSpeed] = useState(0.4)
-  const [isShowModal, setIsShowModal] = useState(false)
+  const [isShowModal, setIsShowModal] = useState(
+    [...Array(characters.length)].fill(false)
+  )
+  const [isPlaying, setIsPlaying] = useState(
+    [...Array(characters.length)].fill(false)
+  )
 
   // Pixiを描画するタイミングを調整しないといけないのだが、今はこれしか思い浮かばない
   useEffect(() => {
@@ -50,8 +56,40 @@ export default function Main() {
   }, [])
 
   console.log(isSpeed)
-  console.log(isShowModal)
 
+  const updateIsPlayingState = (index) => {
+    !isShowModal.some((value) => value) &&
+      setIsPlaying((currentPlayingState) => {
+        const newPlayingState = currentPlayingState.map((state, innerIndex) =>
+          index === innerIndex ? !state : state
+        )
+        return newPlayingState
+      })
+  }
+  const playInModal = (index) => {
+    isShowModal.some((value) => value) &&
+      setIsPlaying((currentPlayingState) => {
+        const newPlayingState = currentPlayingState.map((innerIndex) =>
+          index === innerIndex ? true : false
+        )
+        return newPlayingState
+      })
+  }
+  const stopAll = () => {
+    isShowModal.some((value) => value) &&
+      setIsPlaying([...Array(characters.length)].fill(false))
+  }
+  const updateIsShowModalState = (index) => {
+    setIsShowModal((currentShowModalState) => {
+      const newShowModalState = currentShowModalState.map((state, innerIndex) =>
+        index === innerIndex ? !state : state
+      )
+      return newShowModalState
+    })
+  }
+  const disableAll = () => {
+    setIsShowModal([...Array(characters.length)].fill(false))
+  }
   return (
     <>
       <Wrapper>
@@ -61,49 +99,59 @@ export default function Main() {
         </Title>
         <Character src='/images/others/ttl.svg' alt='Character' />
         <Characters>
-          <List number='01' onClick={() => setIsShowModal(true)}>
-            {image(allImages(32, '01'), isSpeed, 2)}
-          </List>
-          <List number='02' onClick={() => setIsShowModal(true)}>
-            {image(allImages(90, '02'), isSpeed, 2)}
-          </List>
-          <List number='03' onClick={() => setIsShowModal(true)}>
-            {image(allImages(90, '03'), isSpeed, 2)}
-          </List>
-          <List number='04' onClick={() => setIsShowModal(true)}>
-            <Pc>{image(allImages(90, '04'), isSpeed, 2)}</Pc>
-            <Sp>{image(allImages(90, '05'), isSpeed, 2)}</Sp>
-          </List>
-          <List number='05' onClick={() => setIsShowModal(true)}>
-            <Pc>{image(allImages(90, '05'), isSpeed, 2)}</Pc>
-            <Sp>{image(allImages(90, '04'), isSpeed, 2)}</Sp>
-          </List>
-          <List number='06' onClick={() => setIsShowModal(true)}>
-            {image(allImages(90, '06'), isSpeed, 2)}
-          </List>
+          {characters.map((character, index) => {
+            return (
+              <List
+                key={character.id}
+                number={character.id}
+                onClick={() => {
+                  updateIsShowModalState(index), playInModal(index)
+                }}
+                onMouseEnter={() => updateIsPlayingState(index)}
+                onMouseLeave={() => updateIsPlayingState(index)}
+              >
+                {image(
+                  allImages(character.length, character.id),
+                  isSpeed,
+                  2,
+                  isPlaying[index]
+                )}
+              </List>
+            )
+          })}
         </Characters>
       </Wrapper>
-      <Modal isShowModal={isShowModal}>
-        <Inner>
-          <Image>{image(allImages(32, '01'), isSpeed, 1.65)}</Image>
-          <Profile>
-            <Name>
-              <En>Sam</En>
-              <Ja>（サム）</Ja>
-            </Name>
-            <Introduction>
-              ホテルの新米ベルボーイ。
-              <br />
-              映画「グランドブダペストホテル」に憧れて
-              <br />
-              富裕層が通う高級ホテルで勤務をしている。
-              <br />
-              几帳面で潔癖症。
-            </Introduction>
-            <Border />
-          </Profile>
-        </Inner>
-        <Close onClick={() => setIsShowModal(false)} />
+      <Modal isShowModal={isShowModal.some((value) => value)}>
+        {characters.map((character, index) => {
+          if (isShowModal.findIndex((value) => value) === index) {
+            return (
+              <Inner key={character.id}>
+                <Image>
+                  {image(
+                    allImages(character.length, character.id),
+                    isSpeed,
+                    1.65,
+                    isPlaying[index]
+                  )}
+                </Image>
+                <Profile>
+                  <Name>
+                    <En>{character.en}</En>
+                    <Ja>（{character.ja}）</Ja>
+                  </Name>
+                  <Introduction>{character.intro}</Introduction>
+                  <Border />
+                </Profile>
+              </Inner>
+            )
+          }
+        })}
+        )
+        <Close
+          onClick={() => {
+            disableAll(), stopAll()
+          }}
+        />
       </Modal>
     </>
   )
@@ -264,6 +312,7 @@ const Modal = styled.div`
   &::after {
     content: '';
     position: absolute;
+    left: 0;
     top: 60%;
     width: 100%;
     height: 100%;
@@ -343,6 +392,7 @@ const Introduction = styled.p`
   line-height: 2;
   margin-top: ${pcpx(-23)};
   font-size: ${pcfz(20)};
+  max-width: ${pcpx(400)};
   @media ${device.underMobileL} {
     margin-top: ${sppx(-23)};
   }
