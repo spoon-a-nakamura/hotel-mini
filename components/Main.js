@@ -20,6 +20,7 @@ const allImages = (characterImageLength, directoryId) =>
 const [width, height] = [632, 853]
 
 const MemoAnimatedSprite = React.memo(({ isPlaying, ...props }) => {
+  console.log('memo')
   const animationSprite = useRef()
   useEffect(() => {
     const sprite = animationSprite.current
@@ -28,7 +29,7 @@ const MemoAnimatedSprite = React.memo(({ isPlaying, ...props }) => {
   return <AnimatedSprite ref={animationSprite} {...props} />
 })
 
-const image = (imageLength, speed, imageSize, isPlaying) => {
+const image = (imageLength, imageSize, isPlaying) => {
   console.log('render image')
   return (
     <Stage
@@ -44,52 +45,39 @@ const image = (imageLength, speed, imageSize, isPlaying) => {
         images={imageLength}
         isPlaying={isPlaying}
         initialFrame={0}
-        animationSpeed={speed}
+        animationSpeed={0.5}
         width={width / imageSize}
         height={height / imageSize}
-        interactive={true}
       />
     </Stage>
   )
 }
 export default function Main() {
-  const [isSpeed, setIsSpeed] = useState(0.4)
   const [isShowModal, setIsShowModal] = useState(
     [...Array(characters.length)].fill(false)
   )
   const [isPlaying, setIsPlaying] = useState(
     [...Array(characters.length)].fill(false)
   )
-  // Pixiを描画するタイミングを調整しないといけないのだが、今はこれしか思い浮かばない
-  useEffect(() => {
-    setTimeout(() => {
-      setIsSpeed(isSpeed + 0.1)
-    }, 5000)
-  }, [])
-
-  console.log(isSpeed)
 
   const updateIsPlayingState = (index) => {
-    !isShowModal.some((value) => value) &&
-      setIsPlaying((currentPlayingState) => {
-        const newPlayingState = currentPlayingState.map((state, innerIndex) =>
-          index === innerIndex ? !state : state
-        )
-        return newPlayingState
-      })
+    setIsPlaying((currentPlayingState) => {
+      const newPlayingState = currentPlayingState.map((state, innerIndex) =>
+        index === innerIndex ? !state : state
+      )
+      return newPlayingState
+    })
   }
   const playInModal = (index) => {
-    isShowModal.some((value) => value) &&
-      setIsPlaying((currentPlayingState) => {
-        const newPlayingState = currentPlayingState.map((innerIndex) =>
-          index === innerIndex ? true : false
-        )
-        return newPlayingState
-      })
+    setIsPlaying((currentPlayingState) => {
+      const newPlayingState = currentPlayingState.map((state, innerIndex) =>
+        index === innerIndex ? !state : state
+      )
+      return newPlayingState
+    })
   }
   const stopAll = () => {
-    isShowModal.some((value) => value) &&
-      setIsPlaying([...Array(characters.length)].fill(false))
+    setIsPlaying([...Array(characters.length)].fill(false))
   }
   const updateIsShowModalState = (index) => {
     setIsShowModal((currentShowModalState) => {
@@ -102,7 +90,6 @@ export default function Main() {
   const disableAll = () => {
     setIsShowModal([...Array(characters.length)].fill(false))
   }
-
   return (
     <>
       <Wrapper>
@@ -125,10 +112,8 @@ export default function Main() {
               >
                 {image(
                   allImages(character.length, character.id),
-                  isSpeed,
                   2,
-                  isPlaying[index],
-                  () => pointerDown()
+                  isPlaying[index]
                 )}
               </List>
             )
@@ -140,13 +125,11 @@ export default function Main() {
           if (isShowModal.findIndex((value) => value) === index) {
             return (
               <Inner key={character.id}>
-                <Image>
+                <Image onClick={() => updateIsPlayingState(index)}>
                   {image(
                     allImages(character.length, character.id),
-                    isSpeed,
                     1.65,
-                    isPlaying[index],
-                    () => pointerDown(index)
+                    isPlaying[index]
                   )}
                 </Image>
                 <Profile>
