@@ -69,12 +69,16 @@ export default function Main() {
     })
   }
   const playInModal = (index) => {
-    setIsPlaying((currentPlayingState) => {
-      const newPlayingState = currentPlayingState.map((state, innerIndex) =>
-        index === innerIndex ? !state : state
-      )
-      return newPlayingState
-    })
+    console.log(isPlaying[index])
+    setTimeout(() => {
+      console.log(isPlaying[index])
+      setIsPlaying((currentPlayingState) => {
+        const newPlayingState = currentPlayingState.map((_, innerIndex) =>
+          index === innerIndex ? true : false
+        )
+        return newPlayingState
+      })
+    }, 100)
   }
   const stopAll = () => {
     setIsPlaying([...Array(characters.length)].fill(false))
@@ -125,7 +129,7 @@ export default function Main() {
           if (isShowModal.findIndex((value) => value) === index) {
             return (
               <Inner key={character.id}>
-                <Image onClick={() => updateIsPlayingState(index)}>
+                <Image>
                   {image(
                     allImages(character.length, character.id),
                     1.65,
@@ -142,9 +146,10 @@ export default function Main() {
                 </Profile>
               </Inner>
             )
+          } else {
+            return null
           }
         })}
-        )
         <Close
           onClick={() => {
             disableAll(), stopAll()
@@ -378,13 +383,22 @@ const Name = styled.h2`
   font-style: normal;
   font-size: ${pcfz(100)};
   @media ${device.underMobileL} {
-    font-size: 18vw;
+    font-size: 16vw;
   }
 `
-const En = styled.span``
+const En = styled.span`
+  @media ${device.underMobileL} {
+    display: block;
+    margin-bottom: ${sppx(-25)};
+  }
+`
 const Ja = styled.span`
   font-size: ${pcfz(22)};
   font-weight: bold;
+  @media ${device.underMobileL} {
+    position: relative;
+    top: ${sppx(-10)};
+  }
 `
 const Introduction = styled.p`
   line-height: 2;
@@ -393,7 +407,7 @@ const Introduction = styled.p`
   max-width: ${pcpx(400)};
   @media ${device.underMobileL} {
     margin-top: ${sppx(-23)};
-    max-width: initial;
+    max-width: 90%;
   }
 `
 const Border = styled.div`
