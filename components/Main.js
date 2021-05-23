@@ -80,9 +80,6 @@ export default function Main() {
       })
     }, 100)
   }
-  const stopAll = () => {
-    setIsPlaying([...Array(characters.length)].fill(false))
-  }
   const updateIsShowModalState = (index) => {
     setIsShowModal((currentShowModalState) => {
       const newShowModalState = currentShowModalState.map((state, innerIndex) =>
@@ -91,12 +88,15 @@ export default function Main() {
       return newShowModalState
     })
   }
-  const disableAll = () => {
+  const hideModal = () => {
     setIsShowModal([...Array(characters.length)].fill(false))
+  }
+  const stopAll = () => {
+    setIsPlaying([...Array(characters.length)].fill(false))
   }
   return (
     <>
-      <Wrapper>
+      <Wrapper isShowModal={isShowModal.some((value) => value)}>
         <Title>
           <Logo src='/images/others/logo.svg' alt='Hotel Mini' />
           <Hotel src='/images/others/hotel.svg' alt='' />
@@ -129,7 +129,11 @@ export default function Main() {
           if (isShowModal.findIndex((value) => value) === index) {
             return (
               <Inner key={character.id}>
-                <Image>
+                <Image
+                  onClick={() => {
+                    updateIsPlayingState(index)
+                  }}
+                >
                   {image(
                     allImages(character.length, character.id),
                     1.65,
@@ -152,7 +156,7 @@ export default function Main() {
         })}
         <Close
           onClick={() => {
-            disableAll(), stopAll()
+            hideModal(), stopAll()
           }}
         />
       </Modal>
@@ -168,7 +172,8 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   border: 5px solid #3a4796;
-  &::before {
+  /* &::before,
+  &::after {
     content: '';
     display: block;
     position: fixed;
@@ -179,7 +184,7 @@ const Wrapper = styled.div`
     background: url(/images/others/texture.png) center / cover no-repeat;
     mix-blend-mode: multiply;
     pointer-events: none;
-  }
+  } */
   @media ${device.underMobileL} {
     height: auto;
     flex-direction: column;
@@ -311,23 +316,50 @@ const Modal = styled.div`
   height: 100%;
   top: 0;
   left: 0;
+  transition: all ease-in-out 0.3s;
   pointer-events: ${({ isShowModal }) => (isShowModal ? 'initial' : 'none')};
+  opacity: ${({ isShowModal }) => (isShowModal ? '1' : '0')};
+  /* &::before {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url(/images/others/texture.png) center / cover no-repeat;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  } */
   &::after {
     content: '';
     position: absolute;
     left: 0;
-    top: 60%;
-    width: 100%;
-    height: 100%;
+    top: 61.3%;
+    width: 110%;
+    height: 110%;
     background: #3a4796;
     z-index: -1;
+    /* animation: movingBg 3s ease-in-out forwards;
+    animation-name: ${({ isShowModal }) =>
+      isShowModal ? 'movingBg' : 'none'}; */
   }
-  opacity: ${({ isShowModal }) => (isShowModal ? '1' : '0')};
   @media ${device.underMobileL} {
     background: #3a4796;
     &::after {
       top: 30%;
       background: #ce4833;
+    }
+  }
+  @keyframes movingBg {
+    0% {
+      transform: translateY(-170%);
+    }
+    50% {
+      transform: translateY(100%);
+    }
+    100% {
+      transform: translateY(0%);
     }
   }
 `
@@ -346,6 +378,7 @@ const Image = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
   width: ${pcpx(583.58)};
   height: ${pcpx(637.26)};
   margin-right: ${pcpx(100)};
@@ -369,7 +402,7 @@ const Profile = styled.div`
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  margin-top: ${pcpx(-88)};
+  margin-top: ${pcpx(-20)};
   @media ${device.underMobileL} {
     margin-top: ${sppx(50)};
     margin-right: auto;
@@ -411,7 +444,7 @@ const Introduction = styled.p`
   }
 `
 const Border = styled.div`
-  margin-top: ${pcpx(63)};
+  margin-top: ${pcpx(30)};
   width: ${pcpx(428.18)};
   height: ${pcpx(38.18)};
   background: url(/images/others/border.svg) center / contain no-repeat;
