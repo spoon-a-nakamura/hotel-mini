@@ -1,44 +1,57 @@
 import styled from '@emotion/styled'
 import { device } from '../components/MediaQuery'
 import { Stage, AnimatedSprite } from '@inlet/react-pixi'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { sppx, pcpx, pcfz } from './Util'
 import { characters } from './characters'
 
-// characterSizeには対象となる画像枚数を。directoryIdは対象ディレクトリ名称を
-const allImages = (characterSize, directoryId) =>
-  [...Array(characterSize)].map(
+// characterImageLengthには対象となる画像枚数を。directoryIdは対象ディレクトリ名称を
+const allImages = (characterImageLength, directoryId) =>
+  [...Array(characterImageLength)].map(
     (_, index) => `/images/character/${directoryId}/${index + 1}.png`
   )
 
 // アニメーションさせる画像数を半分にする
 // const checkIsOdd = (number) => number % 2 === 1
 // const filterOddArray = (array) => array.filter((_, index) => checkIsOdd(index))
-// const oddFilteredImages = (characterSize, directoryId) =>
-//   filterOddArray(allImages(characterSize, directoryId))
+// const oddFilteredImages = (characterImageLength, directoryId) =>
+//   filterOddArray(allImages(characterImageLength, directoryId))
 
 const [width, height] = [632, 853]
-const image = (imageLength, speed, imageSize, isPlaying) => (
-  <Stage
-    width={width / imageSize}
-    height={height / imageSize}
-    options={{
-      autoDensity: true,
-      backgroundAlpha: 0,
-    }}
-  >
-    <AnimatedSprite
-      anchor={0}
-      images={imageLength}
-      isPlaying={isPlaying}
-      initialFrame={0}
-      animationSpeed={speed}
+
+const MemoAnimatedSprite = React.memo(({ isPlaying, ...props }) => {
+  const animationSprite = useRef()
+  useEffect(() => {
+    const sprite = animationSprite.current
+    sprite[isPlaying ? 'gotoAndPlay' : 'gotoAndStop'](sprite.currentFrame)
+  }, [isPlaying])
+  return <AnimatedSprite ref={animationSprite} {...props} />
+})
+
+const image = (imageLength, speed, imageSize, isPlaying) => {
+  console.log('render image')
+  return (
+    <Stage
       width={width / imageSize}
       height={height / imageSize}
-    />
-  </Stage>
-)
-
+      options={{
+        autoDensity: true,
+        backgroundAlpha: 0,
+      }}
+    >
+      <MemoAnimatedSprite
+        anchor={0}
+        images={imageLength}
+        isPlaying={isPlaying}
+        initialFrame={0}
+        animationSpeed={speed}
+        width={width / imageSize}
+        height={height / imageSize}
+        interactive={true}
+      />
+    </Stage>
+  )
+}
 export default function Main() {
   const [isSpeed, setIsSpeed] = useState(0.4)
   const [isShowModal, setIsShowModal] = useState(
@@ -47,7 +60,6 @@ export default function Main() {
   const [isPlaying, setIsPlaying] = useState(
     [...Array(characters.length)].fill(false)
   )
-
   // Pixiを描画するタイミングを調整しないといけないのだが、今はこれしか思い浮かばない
   useEffect(() => {
     setTimeout(() => {
@@ -90,6 +102,7 @@ export default function Main() {
   const disableAll = () => {
     setIsShowModal([...Array(characters.length)].fill(false))
   }
+
   return (
     <>
       <Wrapper>
@@ -114,7 +127,8 @@ export default function Main() {
                   allImages(character.length, character.id),
                   isSpeed,
                   2,
-                  isPlaying[index]
+                  isPlaying[index],
+                  () => pointerDown()
                 )}
               </List>
             )
@@ -131,7 +145,8 @@ export default function Main() {
                     allImages(character.length, character.id),
                     isSpeed,
                     1.65,
-                    isPlaying[index]
+                    isPlaying[index],
+                    () => pointerDown(index)
                   )}
                 </Image>
                 <Profile>
@@ -395,6 +410,7 @@ const Introduction = styled.p`
   max-width: ${pcpx(400)};
   @media ${device.underMobileL} {
     margin-top: ${sppx(-23)};
+    max-width: initial;
   }
 `
 const Border = styled.div`
