@@ -139,6 +139,8 @@ export default function Main() {
                     1.65,
                     isPlaying[index]
                   )}
+                  <Star01 />
+                  <Star02 />
                 </Image>
                 <Profile>
                   <Name>
@@ -267,6 +269,11 @@ const List = styled.li`
   &:last-child {
     margin-left: auto;
   }
+  &:nth-of-type(4) {
+    canvas {
+      margin-top: ${sppx(15)};
+    }
+  }
   @media ${device.underMobileL} {
     background: ${({ number }) =>
       `url(/images/character/sp/${number}.svg) center /contain no-repeat`};
@@ -378,6 +385,7 @@ const Image = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
   cursor: pointer;
   width: ${pcpx(583.58)};
   height: ${pcpx(637.26)};
@@ -457,19 +465,48 @@ const Border = styled.div`
 `
 const Close = styled.div`
   position: absolute;
-  top: 50px;
-  right: 50px;
-  width: 28px;
-  height: 28px;
+  top: ${pcpx(50)};
+  right: ${pcpx(50)};
+  width: ${pcpx(28)};
+  height: ${pcpx(28)};
   background: url(/images/others/close.svg) center / contain no-repeat;
   cursor: pointer;
   @media ${device.underMobileL} {
-    top: 20px;
-    right: 20px;
-    width: 20px;
-    height: 20px;
+    top: ${sppx(20)};
+    right: ${sppx(20)};
+    width: ${sppx(20)};
+    height: ${sppx(20)};
   }
 `
+const Star01 = styled.div`
+  position: absolute;
+  top: ${pcpx(147)};
+  right: ${pcpx(127)};
+  width: ${pcpx(24.38)};
+  height: ${pcpx(33.6)};
+  background: url(/images/others/star01.svg) center / contain no-repeat;
+  @media ${device.underMobileL} {
+    top: ${sppx(230)};
+    right: ${sppx(60)};
+    width: ${sppx(19.19)};
+    height: ${sppx(26.43)};
+  }
+`
+const Star02 = styled.div`
+  position: absolute;
+  top: ${pcpx(110)};
+  right: ${pcpx(80)};
+  width: ${pcpx(44.57)};
+  height: ${pcpx(61.41)};
+  background: url(/images/others/star02.svg) center / contain no-repeat;
+  @media ${device.underMobileL} {
+    top: ${sppx(200)};
+    right: ${sppx(20)};
+    width: ${sppx(35.07)};
+    height: ${sppx(48.32)};
+  }
+`
+
 const Pc = styled.div`
   display: flex;
   justify-content: center;
